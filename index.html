@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Are You Feeling Today?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .mood-option {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .mood-option:hover {
+            border-color: #667eea;
+            background-color: #f8f9ff;
+        }
+        .mood-option input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        .mood-emoji {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        .mood-text {
+            font-size: 1.1em;
+            color: #333;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s ease;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+        .results {
+            margin-top: 30px;
+            display: none;
+        }
+        .result-item {
+            margin: 15px 0;
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        .progress-bar {
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s ease;
+        }
+        .total-votes {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+            font-weight: bold;
+        }
+        .thank-you {
+            text-align: center;
+            margin-top: 20px;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>How Are You Feeling Today? 🌤️</h1>
+        <p class="subtitle">Share your mood with us - your wellbeing matters!</p>
+        
+        <form id="moodForm">
+            <div class="mood-option">
+                <input type="radio" id="sunny" name="mood" value="sunny">
+                <label for="sunny" style="display: flex; align-items: center; cursor: pointer; width: 100%;">
+                    <span class="mood-emoji">🌞</span>
+                    <span class="mood-text">Sunny — Energetic / Very Good!</span>
+                </label>
+            </div>
+            
+            <div class="mood-option">
+                <input type="radio" id="partly-cloudy" name="mood" value="partly-cloudy">
+                <label for="partly-cloudy" style="display: flex; align-items: center; cursor: pointer; width: 100%;">
+                    <span class="mood-emoji">⛅</span>
+                    <span class="mood-text">Partly Cloudy — Could be better</span>
+                </label>
+            </div>
+            
+            <div class="mood-option">
+                <input type="radio" id="cloudy" name="mood" value="cloudy">
+                <label for="cloudy" style="display: flex; align-items: center; cursor: pointer; width: 100%;">
+                    <span class="mood-emoji">☁️</span>
+                    <span class="mood-text">Cloudy — Not feeling great</span>
+                </label>
+            </div>
+            
+            <div class="mood-option">
+                <input type="radio" id="rainy" name="mood" value="rainy">
+                <label for="rainy" style="display: flex; align-items: center; cursor: pointer; width: 100%;">
+                    <span class="mood-emoji">🌧️</span>
+                    <span class="mood-text">Rainy — Not doing OK</span>
+                </label>
+            </div>
+            
+            <div class="mood-option">
+                <input type="radio" id="stormy" name="mood" value="stormy">
+                <label for="stormy" style="display: flex; align-items: center; cursor: pointer; width: 100%;">
+                    <span class="mood-emoji">🌩️</span>
+                    <span class="mood-text">Stormy — It's going to be a bad day</span>
+                </label>
+            </div>
+            
+            <button type="submit" class="submit-btn">Submit My Mood</button>
+        </form>
+        
+        <div id="results" class="results">
+            <h2>📊 Current Results</h2>
+            
+            <div class="result-item">
+                <div class="result-header">
+                    <span>🌞 Sunny</span>
+                    <span id="sunny-count">0 votes (0%)</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="sunny-bar" class="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-header">
+                    <span>⛅ Partly Cloudy</span>
+                    <span id="partly-cloudy-count">0 votes (0%)</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="partly-cloudy-bar" class="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-header">
+                    <span>☁️ Cloudy</span>
+                    <span id="cloudy-count">0 votes (0%)</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="cloudy-bar" class="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-header">
+                    <span>🌧️ Rainy</span>
+                    <span id="rainy-count">0 votes (0%)</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="rainy-bar" class="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-header">
+                    <span>🌩️ Stormy</span>
+                    <span id="stormy-count">0 votes (0%)</span>
+                </div>
+                <div class="progress-bar">
+                    <div id="stormy-bar" class="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <div class="total-votes" id="total-votes">Total votes: 0</div>
+            <div class="thank-you">Thank you for sharing! Your wellbeing matters to us. 💙</div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize vote counts
+        let votes = JSON.parse(localStorage.getItem('moodVotes')) || {
+            sunny: 0,
+            'partly-cloudy': 0,
+            cloudy: 0,
+            rainy: 0,
+            stormy: 0
+        };
+
+        // Update display
+        function updateResults() {
+            const total = Object.values(votes).reduce((sum, count) => sum + count, 0);
+            
+            Object.keys(votes).forEach(mood => {
+                const count = votes[mood];
+                const percentage = total > 0 ? Math.round((count / total) * 100) : 0;
+                
+                document.getElementById(`${moo
